@@ -1,0 +1,74 @@
+
+Table alunos {
+  id integer [primary key, increment]
+  nome text [not null]
+  email text [not null, unique]
+  senha text [not null]
+  foto text [note: "URL da foto do aluno"]
+  ra text [not null, unique] [note: "Registro Acadêmico do aluno"]
+  created_at timestamp
+
+  indexes {
+    (email, senha) [name: "login"]
+    (nome) [name: "name"]
+    (ra) [unique] [name: "unique_ra"]
+    (email) [unique] [name: "unique_email"]
+  }
+
+}
+
+Table onibus {
+  id interger [primary key]
+  placa varchar
+  marca varchar
+  numero varchar
+  horarios varchar
+  monitor_id interger
+  motorista_id interger
+  created_at timestamp
+}
+
+Table pontos {
+  id interger [primary key]
+  nome varchar
+  localizacao varchar
+  foto varchar
+  escolas_id interger
+  user_id interger
+  onibus_id interger
+  created_at timestamp
+}
+
+Table escolas {
+  id interger [primary key]
+  nome varchar
+  localizacao varchar
+  user_id interger
+  created_at timestamp
+}
+
+Table motorista {
+  id interger [primary key]
+  nome varchar
+  foto varchar
+  created_at timestamp
+}
+
+Table monitor {
+  id interger [primary key]
+  nome varchar
+  foto varchar
+  created_at timestamp
+}
+
+ref alunos_pontos: pontos.user_id < alunos.id
+
+ref pontos_onibus: onibus.id - pontos.onibus_id
+
+ref escolas_pontos: pontos.escolas_id <> escolas.id
+
+ref alunos_escolas: alunos.id > escolas.user_id
+
+ref motorista_onibus: onibus.motorista_id - motorista.id
+
+ref monitor_onibus: onibus.monitor_id - monitor.id
