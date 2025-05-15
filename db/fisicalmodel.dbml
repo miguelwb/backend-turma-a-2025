@@ -6,6 +6,7 @@ Table alunos {
   senha text [not null]
   foto text [note: "URL da foto do aluno"]
   ra text [not null, unique] [note: "Registro Acadêmico do aluno"]
+  role varchar [default: 'aluno' note: "Tipo de usuário: aluno, motorista, monitor, admin"]
   created_at timestamp
 
   indexes {
@@ -26,6 +27,12 @@ Table onibus {
   monitor_id interger
   motorista_id interger
   created_at timestamp
+
+  indexes {
+    (placa) [unique] [name: "bus_plate"]
+    (marca) [name: "bus_brand"]
+    (numero) [name: "bus_number"]
+  }
 }
 
 Table pontos {
@@ -37,14 +44,25 @@ Table pontos {
   user_id interger
   onibus_id interger
   created_at timestamp
+
+  indexes {
+    (nome) [unique] [name: "name"]
+    (localizacao) [unique] [name: "location"]
+  }
+  [note: "Ponto de ônibus onde o aluno pega o ônibus"]
 }
 
 Table escolas {
   id interger [primary key]
-  nome varchar
-  localizacao varchar
+  nome text
+  localizacao text
   user_id interger
   created_at timestamp
+
+  indexes {
+    (nome) [unique] [name: "name"]
+  }
+  [note: "Escola onde o aluno estuda"]
 }
 
 Table motorista {
@@ -52,6 +70,10 @@ Table motorista {
   nome varchar
   foto varchar
   created_at timestamp
+  indexes {
+    (nome) [name: "name"]
+  }
+  [note: "Motorista do ônibus"]
 }
 
 Table monitor {
@@ -59,6 +81,10 @@ Table monitor {
   nome varchar
   foto varchar
   created_at timestamp
+  indexes {
+    (nome) [name: "name"]
+  }
+  [note: "Monitor do ônibus"]
 }
 
 ref alunos_pontos: pontos.user_id < alunos.id
