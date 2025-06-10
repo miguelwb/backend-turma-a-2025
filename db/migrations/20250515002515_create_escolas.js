@@ -4,13 +4,13 @@
  */
 export function up(knex) {
     return knex.schema.createTable('escolas', table => {
-    table.increments('id').primary(); // id integer [primary key]
-    table.text('nome').notNullable(); // nome varchar
-    table.text('localizacao'); // localizacao varchar
-    table.integer('user_id'); // user_id integer
-    table.timestamp('created_at').defaultTo(knex.fn.now()); // created_at timestamp
+    table.increments('id').primary(); 
+    table.text('nome').notNullable(); 
+    table.text('localizacao'); 
+    table.integer('user_id'); 
+    table.timestamp('created_at').defaultTo(knex.fn.now()); 
 
-    // Índices
+   
     table.index(['nome'], 'name_escola');
   });
 }
