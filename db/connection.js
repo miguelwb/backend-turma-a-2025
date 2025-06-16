@@ -1,17 +1,15 @@
-import { DatabaseSync } from "node:sqlite";
+import {DatabaseSync} from "node:sqlite";
 
-import {dbPath} from "../src/utils/dbpath"
-
-console.log("Caminho impportado: " + dbPath);
+import {dbPath} from "../src/utils/dbpath.js"
 
 let db = null;
 
 try {
-    db = new DatabaseSync(dbPath{
+    db = new DatabaseSync(dbPath, {
         verbose: console.log,
         mode: DatabaseSync.OPEN_READWRITE | DatabaseSync.OPEN_CREATE,
     });
-    console.log("Conexão com o banco de dados estabelecida com sucesso.");
+    console.log("Banco de dados conectado com sucesso!");    
 } catch (error) {
     console.log(error);
 }
