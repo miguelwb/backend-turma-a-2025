@@ -5,18 +5,20 @@ import routerOnibus from './routes/onibus.routes.js';
 import routerMonitor from './routes/monitor.routes.js';
 import routerMotorista from './routes/motorista.routes.js';
 import routerPonto from './routes/ponto.routes.js';
+import loginRoutes from './routes/login.routes.js';
 
 const server = express();
 const PORT = process.env.PORT || 3000;
 
 server.use(express.json());
 
-server.use("/api/aluno", routerAluno);
-server.use("/api/escola", routerEscola);
+server.use("/api/alunos", routerAluno);
+server.use("/api/escolas", routerEscola);
 server.use("/api/onibus", routerOnibus);
-server.use("/api/monitor", routerMonitor);
-server.use("/api/motorista", routerMotorista);
-server.use("/api/ponto", routerPonto);
+server.use("/api/monitores", routerMonitor);
+server.use("/api/motoristas", routerMotorista);
+server.use("/api/pontos", routerPonto);
+server.use("/api/login", loginRoutes);
 
 server.get("/", (req, res) => {
     res.send("GET " + new Date());

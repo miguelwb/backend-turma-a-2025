@@ -12,7 +12,7 @@ export const getAllAlunos = async (req, res) => {
 }
 
 export const createAluno = async (req, res) => {
-    try {
+  try {
     const alunoData = req.body;
 
     if (!alunoData.nome || !alunoData.email || !alunoData.ra || !alunoData.senha) {
@@ -20,15 +20,21 @@ export const createAluno = async (req, res) => {
     }
 
     const result = await create(alunoData);
+
+    if (result.conflict) {
+      return res.status(409).json({ message: "Email ou RA já cadastrado" });
+    }
+
     res.status(201).json({
       message: "Aluno criado com sucesso",
-      alunoId: result.lastInsertRowId
+      alunoId: result.info.lastInsertRowid || result.info.lastInsertRowId
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500).json({ message: "Internal server error - Controller" });
   }
 };
+
 export const deleteAluno = async (req, res) => {
   try {
     const { ra } = req.params;

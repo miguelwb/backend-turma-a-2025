@@ -15,19 +15,51 @@ export function findAll() {
   }
 }
 export async function create(alunoData) {
-    try {
+  try {
     const { nome, email, ra, senha } = alunoData;
 
-    const stmt = db.prepare(
+    const checkStmt = db.prepare("SELECT id FROM alunos WHERE email = ? OR ra = ?");
+    const existingAluno = checkStmt.get(email, ra);
+
+    if (existingAluno) {
+      return { conflict: true, message: "Email ou RA já cadastrado" };
+    }
+
+    const insertStmt = db.prepare(
       "INSERT INTO alunos (nome, email, ra, senha) VALUES (?, ?, ?, ?)"
     );
+    const info = insertStmt.run(nome, email, ra, senha);
 
-    return stmt.run(nome, email, ra, senha);
+    return { success: true, info };
   } catch (error) {
     console.error("Erro ao criar aluno:", error);
     throw error;
   }
 }
+
+
+export async function login(loginAluno) {
+  try {
+    const { ra, senha } = loginAluno;
+
+    const stmt = db.prepare("SELECT ra, senha FROM alunos WHERE ra = ?");
+    const aluno = stmt.get(ra);
+
+    if (!aluno) {
+      return null;
+    }
+
+    if (aluno.senha === senha) {
+      return aluno;
+    } else {
+      return null; 
+    }
+  } catch (error) {
+    console.error("erro ao logar:", error);
+    throw error;
+  }
+}
+
 
 export async function remove(ra) {
   try {
