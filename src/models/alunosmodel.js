@@ -6,8 +6,6 @@ export function findAll() {
     const query = "SELECT * FROM alunos;";
     const statement = db.prepare(query);
     const alunos = statement.all();
-    // console.log(alunos)
-    // console.log("Alunos encontrados:", alunos); // veja se imprime no terminal
     return alunos;
   } catch (error) {
     console.error('Error fetching all students: ' + error.message);
