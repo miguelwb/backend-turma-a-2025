@@ -6,6 +6,7 @@ import { getAllAlunos, createAluno, deleteAluno, updateAluno } from '../controll
 router.get('/', getAllAlunos);
 router.post('/adicionar', createAluno);
 router.delete('/:ra', deleteAluno);
-router.patch('/:ra', updateAluno)
+router.patch('/:ra', updateAluno);
+router.post('/login', loginAluno);
 
 export default router;

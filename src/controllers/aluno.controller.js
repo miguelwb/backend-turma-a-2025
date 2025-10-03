@@ -63,3 +63,24 @@ export const updateAluno = async (req, res) => {
     res.status(500).json({ message: "Internal server error - Controller" });
   }
 }
+
+export const loginAluno = async (req, res) => {
+  try {
+    const { ra, senha } = req.body;
+
+    if (!ra || !senha) {
+      return res.status(400).json({ message: "RA e senha são obrigatórios" });
+    }
+
+    const aluno = await login({ ra, senha });
+
+    if (!aluno) {
+      return res.status(401).json({ message: "RA ou senha incorretos" });
+    }
+
+    res.status(200).json({ message: "Login realizado com sucesso", aluno });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error - Controller" });
+  }
+};
