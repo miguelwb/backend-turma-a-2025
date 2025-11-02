@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { createPonto } from '../models/pontosmodel.js';
 
 const pontoSchema = z.object({
     nome: z.string().min(1, "Nome é obrigatório"),
@@ -15,8 +16,8 @@ const pontoController = {
         try {
             const { nome, localizacao, foto, escolas_id, user_id, onibus_id, created_at } = req.body;
             pontoSchema.parse({ nome, localizacao, foto, escolas_id, user_id, onibus_id, created_at });
-            console.log({ nome, localizacao, foto, escolas_id, user_id, onibus_id, created_at });
-            res.status(201).json({ message: 'Ponto de ônibus criado com sucesso' });
+            const result = createPonto({ nome, localizacao, foto, escolas_id, user_id, onibus_id });
+            res.status(201).json({ message: 'Ponto de ônibus criado com sucesso', id: result.id });
         } catch (error) {
             if (error instanceof z.ZodError) {
                 return res.status(400).json({

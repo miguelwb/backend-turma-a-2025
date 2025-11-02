@@ -87,6 +87,9 @@ web_modules/
 .next
 out
 
+# Uploads (arquivos enviados pelo usuário)
+uploads/
+
 # Nuxt.js build / generate output
 .nuxt
 dist

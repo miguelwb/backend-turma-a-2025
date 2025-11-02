@@ -16,8 +16,8 @@ router.post('/', async (req, res) => {
       return res.status(401).json({ success: false, mensagem: "RA ou senha incorretos" });
     }
 
-
-    return res.json({ success: true, mensagem: "Login realizado com sucesso", aluno });
+    // O model já remove a senha; retornamos nome de forma explícita
+    return res.json({ success: true, mensagem: "Login realizado com sucesso", nome: aluno.nome, aluno });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ success: false, mensagem: "Erro interno do servidor" });

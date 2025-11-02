@@ -1,5 +1,5 @@
 
-import { findAll, create, remove, update} from '../models/alunosmodel.js';
+import { findAll, create, remove, update, updateFoto, login } from '../models/alunosmodel.js';
 
 export const getAllAlunos = async (req, res) => {
     try {
@@ -78,9 +78,27 @@ export const loginAluno = async (req, res) => {
       return res.status(401).json({ message: "RA ou senha incorretos" });
     }
 
-    res.status(200).json({ message: "Login realizado com sucesso", aluno });
+    res.status(200).json({ message: "Login realizado com sucesso", aluno, nome: aluno?.nome });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error - Controller" });
   }
 };
+
+export const uploadFotoAluno = async (req, res) => {
+  try {
+    const { ra } = req.params;
+    if (!req.file) {
+      return res.status(400).json({ message: 'Arquivo de foto não enviado' });
+    }
+    const fotoUrl = `/uploads/${req.file.filename}`;
+    const result = updateFoto(ra, fotoUrl);
+    if (result.changes === 0) {
+      return res.status(404).json({ message: 'Aluno não encontrado' });
+    }
+    return res.status(200).json({ message: 'Foto atualizada com sucesso', foto: fotoUrl });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error - Controller' });
+  }
+}

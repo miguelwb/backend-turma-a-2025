@@ -40,7 +40,7 @@ export async function login(loginAluno) {
   try {
     const { ra, senha } = loginAluno;
 
-    const stmt = db.prepare("SELECT ra, senha FROM alunos WHERE ra = ?");
+    const stmt = db.prepare("SELECT id, nome, email, ra, role, senha FROM alunos WHERE ra = ?");
     const aluno = stmt.get(ra);
 
     if (!aluno) {
@@ -48,7 +48,8 @@ export async function login(loginAluno) {
     }
 
     if (aluno.senha === senha) {
-      return aluno;
+      const { senha: _, ...sanitized } = aluno;
+      return sanitized;
     } else {
       return null; 
     }
@@ -79,6 +80,17 @@ export async function update(ra, alunoData) {
     const result = statement.run(alunoData.nome, alunoData.email, ra);
   } catch (error) {
     console.error("Erro ao atualizar aluno:", error);
+    throw error;
+  }
+}
+
+export function updateFoto(ra, fotoPath) {
+  try {
+    const stmt = db.prepare('UPDATE alunos SET foto = ? WHERE ra = ?;');
+    const info = stmt.run(fotoPath, ra);
+    return info;
+  } catch (error) {
+    console.error('Erro ao atualizar foto do aluno:', error);
     throw error;
   }
 }
