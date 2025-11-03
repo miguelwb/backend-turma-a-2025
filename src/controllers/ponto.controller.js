@@ -4,10 +4,10 @@ import { createPonto } from '../models/pontosmodel.js';
 const pontoSchema = z.object({
     nome: z.string().min(1, "Nome é obrigatório"),
     localizacao: z.string().min(1, "Localização é obrigatória"),
-    foto: z.string().min(1, "Foto é obrigatória"),
-    escolas_id: z.number().int().min(1, "ID da escola é obrigatório"),
-    user_id: z.number().int().min(1, "ID do usuário é obrigatório"),
-    onibus_id: z.number().int().min(1, "ID do ônibus é obrigatório"),
+    foto: z.string().optional(),
+    escolas_id: z.number().int().optional(),
+    user_id: z.number().int().optional(),
+    onibus_id: z.number().int().optional(),
     created_at: z.string().datetime().optional(),
 });
 
