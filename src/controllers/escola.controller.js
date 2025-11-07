@@ -30,15 +30,15 @@ const escolaController = {
     async updateEscola(req, res) {
         try {
             const {id} = req.params;
-            const {nome, localizacao} = req.body;
+            const {nome, localizacao, created_at} = req.body;
             escolaSchema.parse({nome, localizacao, created_at});
             res.status(200).json({message:'Dados da escola alterado com sucesso',escola:{id,nome, localizacao, created_at}});
         } catch (error) {
-            res.status(500).json({ message: error.message });
             if (error instanceof z.ZodError) {
-                res.status(400).json({message: "Erro de Validação",
+                return res.status(400).json({message: "Erro de Validação",
                     details: error.errors});
             }
+            res.status(500).json({ message: error.message });
         }
     },
 
