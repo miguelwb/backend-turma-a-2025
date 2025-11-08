@@ -8,6 +8,7 @@ import routerPonto from './routes/ponto.routes.js';
 import loginRoutes from './routes/login.routes.js';
 import rotaRoutes from './routes/rota.routes.js';
 import notificacaoRoutes from './routes/notificacao.routes.js';
+import contatoRoutes from './routes/contato.routes.js';
 import path from 'node:path';
 
 const server = express();
@@ -25,6 +26,7 @@ server.use("/api/pontos", routerPonto);
 server.use("/api/login", loginRoutes);
 server.use("/api/rotas", rotaRoutes);
 server.use("/api/notificacoes", notificacaoRoutes);
+server.use("/api/contato", contatoRoutes);
 
 server.get("/", (req, res) => {
     res.send("GET " + new Date());
