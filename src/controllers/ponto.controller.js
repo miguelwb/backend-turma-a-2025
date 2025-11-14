@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { createPonto } from '../models/pontosmodel.js';
+import { createPonto, findAllPontos } from '../models/pontosmodel.js';
 
 const pontoSchema = z.object({
     nome: z.string().min(1, "Nome é obrigatório"),
@@ -12,6 +12,14 @@ const pontoSchema = z.object({
 });
 
 const pontoController = {
+    async listarPontos(req, res) {
+        try {
+            const pontos = findAllPontos();
+            return res.status(200).json(pontos);
+        } catch (error) {
+            return res.status(500).json({ message: 'Erro interno do servidor' });
+        }
+    },
     async createPonto(req, res) {
         try {
             const { nome, localizacao, foto, escolas_id, user_id, onibus_id, created_at } = req.body;

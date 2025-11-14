@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { createNotificacao, marcarComoLida } from '../models/notificacoesmodel.js';
+import { createNotificacao, marcarComoLida, findAllNotificacoes } from '../models/notificacoesmodel.js';
 
 const notificacaoSchema = z.object({
   user_id: z.number().int().min(1, 'ID do usuário é obrigatório'),
@@ -9,6 +9,15 @@ const notificacaoSchema = z.object({
 });
 
 const notificacaoController = {
+  async listar(req, res) {
+    try {
+      const { user_id } = req.query;
+      const lista = findAllNotificacoes(user_id ? Number(user_id) : undefined);
+      return res.status(200).json(lista);
+    } catch (error) {
+      return res.status(500).json({ message: 'Erro interno do servidor' });
+    }
+  },
   async create(req, res) {
     try {
       const { user_id, titulo, mensagem, created_at } = req.body;

@@ -25,3 +25,17 @@ export function marcarComoLida(id) {
     throw error;
   }
 }
+
+export function findAllNotificacoes(userId) {
+  try {
+    if (userId) {
+      const stmt = db.prepare('SELECT * FROM notificacoes WHERE user_id = ? ORDER BY id DESC;');
+      return stmt.all(userId);
+    }
+    const stmt = db.prepare('SELECT * FROM notificacoes ORDER BY id DESC;');
+    return stmt.all();
+  } catch (error) {
+    console.error('Erro ao buscar notificações:', error);
+    throw error;
+  }
+}
