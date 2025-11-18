@@ -27,7 +27,7 @@ export const createAluno = async (req, res) => {
 
     res.status(201).json({
       message: "Aluno criado com sucesso",
-      alunoId: result.info.lastInsertRowid || result.info.lastInsertRowId
+      alunoId: result.id
     });
   } catch (error) {
     console.error(error);
@@ -92,7 +92,7 @@ export const uploadFotoAluno = async (req, res) => {
       return res.status(400).json({ message: 'Arquivo de foto não enviado' });
     }
     const fotoUrl = `/uploads/${req.file.filename}`;
-    const result = updateFoto(ra, fotoUrl);
+    const result = await updateFoto(ra, fotoUrl);
     if (result.changes === 0) {
       return res.status(404).json({ message: 'Aluno não encontrado' });
     }

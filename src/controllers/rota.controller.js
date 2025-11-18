@@ -13,7 +13,7 @@ const rotaController = {
     try {
       const { nome, descricao, onibus_id, created_at } = req.body;
       rotaSchema.parse({ nome, descricao, onibus_id, created_at });
-      const result = createRota({ nome, descricao, onibus_id });
+      const result = await createRota({ nome, descricao, onibus_id });
       res.status(201).json({ message: 'Rota criada com sucesso', id: result.id });
     } catch (error) {
       if (error instanceof z.ZodError) {
