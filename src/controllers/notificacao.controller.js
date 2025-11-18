@@ -12,7 +12,7 @@ const notificacaoController = {
   async listar(req, res) {
     try {
       const { user_id } = req.query;
-      const lista = findAllNotificacoes(user_id ? Number(user_id) : undefined);
+      const lista = await findAllNotificacoes(user_id ? Number(user_id) : undefined);
       return res.status(200).json(lista);
     } catch (error) {
       return res.status(500).json({ message: 'Erro interno do servidor' });
@@ -22,7 +22,7 @@ const notificacaoController = {
     try {
       const { user_id, titulo, mensagem, created_at } = req.body;
       notificacaoSchema.parse({ user_id, titulo, mensagem, created_at });
-      const result = createNotificacao({ user_id, titulo, mensagem });
+      const result = await createNotificacao({ user_id, titulo, mensagem });
       res.status(201).json({ message: 'Notificação criada com sucesso', id: result.id });
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -38,7 +38,7 @@ const notificacaoController = {
   async marcarLida(req, res) {
     try {
       const { id } = req.params;
-      const result = marcarComoLida(Number(id));
+      const result = await marcarComoLida(Number(id));
       if (!result.success) {
         return res.status(404).json({ message: 'Notificação não encontrada' });
       }

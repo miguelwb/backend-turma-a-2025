@@ -14,7 +14,7 @@ const pontoSchema = z.object({
 const pontoController = {
     async listarPontos(req, res) {
         try {
-            const pontos = findAllPontos();
+            const pontos = await findAllPontos();
             return res.status(200).json(pontos);
         } catch (error) {
             return res.status(500).json({ message: 'Erro interno do servidor' });
@@ -24,7 +24,7 @@ const pontoController = {
         try {
             const { nome, localizacao, foto, escolas_id, user_id, onibus_id, created_at } = req.body;
             pontoSchema.parse({ nome, localizacao, foto, escolas_id, user_id, onibus_id, created_at });
-            const result = createPonto({ nome, localizacao, foto, escolas_id, user_id, onibus_id });
+            const result = await createPonto({ nome, localizacao, foto, escolas_id, user_id, onibus_id });
             res.status(201).json({ message: 'Ponto de ônibus criado com sucesso', id: result.id });
         } catch (error) {
             if (error instanceof z.ZodError) {
