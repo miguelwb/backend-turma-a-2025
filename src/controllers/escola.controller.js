@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { createEscola, updateEscola as updateEscolaModel, deleteEscola as deleteEscolaModel } from '../models/escolasmodel.js';
+import { createEscola, deleteEscola as deleteEscolaModel, findAllEscolas, updateEscola as updateEscolaModel } from '../models/escolasmodel.js';
 const escolaSchema = z.object({
   nome: z.string().min(1, 'Nome é obrigatório'),
   localizacao: z.string().min(1, 'Localização é obrigatória'),
@@ -7,9 +7,18 @@ const escolaSchema = z.object({
   created_at: z.string().datetime().optional(),
 });
 const escolaController = {
+  async listarEscolas(req, res) {
+    try {
+      const escolas = await findAllEscolas();
+      return res.status(200).json(escolas);
+    } catch (error) {
+      return res.status(500).json({ message: 'Erro interno do servidor' });
+    }
+  },
   async createEscola(req, res) {
     try {
-      const { nome, localizacao, user_id, created_at } = req.body;
+      const { nome, localizacao: locRaw, endereco, latitude, longitude, user_id, created_at } = req.body;
+      const localizacao = locRaw ?? (endereco ? `${endereco};${latitude ?? ''};${longitude ?? ''}` : undefined);
       escolaSchema.parse({ nome, localizacao, user_id, created_at });
       const result = await createEscola({ nome, localizacao, user_id });
       res.status(201).json({ message: 'Escola criada com sucesso', id: result.id });
@@ -27,7 +36,8 @@ const escolaController = {
   async updateEscola(req, res) {
     try {
       const { id } = req.params;
-      const { nome, localizacao, created_at } = req.body;
+      const { nome, localizacao: locRaw, endereco, latitude, longitude, created_at } = req.body;
+      const localizacao = locRaw ?? (endereco ? `${endereco};${latitude ?? ''};${longitude ?? ''}` : undefined);
       escolaSchema.parse({ nome, localizacao, created_at });
       const result = await updateEscolaModel(id, { nome, localizacao });
       if (result.changes === 0) {
